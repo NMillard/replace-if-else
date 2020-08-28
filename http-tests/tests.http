@@ -1,0 +1,37 @@
+﻿GET https://localhost:5001/api/users
+Accept: application/json
+
+###
+
+
+
+POST https://localhost:5001/api/users/updateEmail
+Content-Type: application/json
+
+{
+  "oldEmail": "somemail2@user.dk",
+  "newEmail": "hello@user.dk"
+}
+
+###
+
+POST https://localhost:5001/api/users/UpdateUsername
+Content-Type: application/json
+
+{
+  "email": "otheruser@user.dk",
+  "newUsername": "MyNewUsername"
+}
+
+###
+
+POST https://localhost:5001/api/users/Update
+Content-Type: application/json
+
+{
+  "UpdateReason": 0,
+  "email": "otheruser@user.dk",
+  "Username": "someuser"
+}
+
+###
