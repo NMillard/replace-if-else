@@ -25,13 +25,37 @@ Content-Type: application/json
 
 ###
 
+// Update email
 POST https://localhost:5001/api/users/Update
 Content-Type: application/json
 
 {
   "UpdateReason": 0,
-  "email": "otheruser@user.dk",
-  "Username": "someuser"
+  "originalEmail": "otheruser@user.dk",
+  "updatedEmail": "otheruser@user.dk"
+}
+
+###
+
+// Update username
+POST https://localhost:5001/api/users/Update
+Content-Type: application/json
+
+{
+  "UpdateReason": 1,
+  "originalEmail": "otheruser@user.dk",
+  "updatedUsername": "someuser"
+}
+
+###
+
+// Update email using the dynamic command dispatcher
+POST https://localhost:5001/api/users/UpdateEmailWithDispatcher
+Content-Type: application/json
+
+{
+  "OldEmail": "otheruser@user.dk",
+  "NewEmail": "somenewemail@user.dk"
 }
 
 ###

@@ -24,7 +24,8 @@ namespace Medium.ReplacingIfElse.WebClient {
             // Extension methods from Application project
             services.AddCommands()
                 .AddQueries()
-                .AddServices();
+                .AddServices()
+                .AddCommandDispatcher();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

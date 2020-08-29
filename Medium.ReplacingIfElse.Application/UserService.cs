@@ -16,27 +16,33 @@ namespace Medium.ReplacingIfElse.Application {
             this.repository = repository;
         }
 
+        // This kinda code is a trip down memory lane.
+        // Filled with nightmares and horrors...
         public async Task UpdateUserAsync(UpdateReason updateReason, IUpdateUser userInfo) {
 
             User? user = await repository.FindByEmailAsync(userInfo.OriginalEmail);
             if (user is null) return;
             
-            // This kinda code is a trip down memory lane.
-            // Filled with nightmares and horrors...
             if (updateReason == UpdateReason.EmailChanged) {
-                
+                user.ChangeEmail(userInfo.UpdatedEmail);
+                // Generate new security stamp
+                // Notify marketing
             } else if (updateReason == UpdateReason.UsernameChanged) {
-                
+                user.ChangeUsername(userInfo.UpdatedUsername);
+                // Update profile slug
+                // Notify user's followers about the username change
             } else {
                 throw new ArgumentException();
             }
+            
+            await repository.UpdateAsync(user);
         }
     }
     
     public interface IUpdateUser {
         string OriginalEmail { get; }
-        string Email { get; }
-        string Username { get; }
+        string UpdatedEmail { get; }
+        string UpdatedUsername { get; }
     }
     
     public enum UpdateReason {

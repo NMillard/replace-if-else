@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Medium.ReplacingIfElse.Application;
+using Medium.ReplacingIfElse.Application.CommandHandlers.Users;
 using Medium.ReplacingIfElse.Application.Commands.Users;
 using Medium.ReplacingIfElse.Application.Queries.Users;
 using Medium.ReplacingIfElse.Domain;
@@ -16,6 +17,7 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         private readonly ChangeEmail changeEmail;
         private readonly ChangeUsername changeUsername;
         private readonly UserService userService;
+        private readonly CommandDispatcher dispatcher;
 
         /* Take commands as dependencies.
          * This may get awkward once a constructor
@@ -30,12 +32,14 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
             GetUsers getUsers,
             ChangeEmail changeEmail,
             ChangeUsername changeUsername,
-            UserService userService // <- Old-school service class.
+            UserService userService, // <- Old-school service class.
+            CommandDispatcher dispatcher // <- dynamic command dispatcher
             ) {
             this.getUsers = getUsers;
             this.changeEmail = changeEmail;
             this.changeUsername = changeUsername;
             this.userService = userService;
+            this.dispatcher = dispatcher;
         }
         
         [HttpGet("")]
@@ -77,14 +81,21 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
             
             return Ok();
         }
+        
+        [HttpPost("UpdateEmailWithDispatcher")]
+        public async Task<IActionResult> UpdateEmailWithDispatcher(ChangeEmailInput input) {
+            await dispatcher.DispatchAsync(new UpdateEmailCommand(input.OldEmail, input.NewEmail));
+            
+            return Ok();
+        }
 
         public class UpdateUser : IUpdateUser {
             public UpdateReason UpdateReason { get; set; }
             [EmailAddress]
             public string OriginalEmail { get; set; }
             [EmailAddress]
-            public string Email { get; set; }
-            public string Username { get; set; }
+            public string UpdatedEmail { get; set; }
+            public string UpdatedUsername { get; set; }
         }
         
         public class ChangeUsernameInput : IChangeUsernameInput {
@@ -94,11 +105,13 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         }
         
         public class ChangeEmailInput : IEmailChangeInput {
+
             [EmailAddress]
             public string OldEmail { get; set; }
             
             [EmailAddress]
             public string NewEmail { get; set; }
+
         }
     }
 }
