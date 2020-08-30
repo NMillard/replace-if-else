@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Medium.ReplacingIfElse.Application.CommandHandlers;
@@ -31,7 +32,21 @@ namespace Medium.ReplacingIfElse.Application.DependencyInjection {
                 services.AddScoped(handlerInterface, concreteHandler);
             }
 
-            services.AddScoped<CommandDispatcher>(provider => new CommandDispatcher(provider));
+            // this factory method is called every time a CommandDispatcher is required
+            services.AddScoped<CommandDispatcher>(provider => {
+                var handlerTypes = new Dictionary<Type, IEnumerable<object>>();
+
+                ServiceDescriptor[] descriptors = services
+                    .Where(t => t.ServiceType.IsGenericType &&
+                                t.ServiceType.GetGenericTypeDefinition() == typeof(ICommandHandlerAsync<>))
+                    .ToArray();
+
+                foreach (var serviceDescriptor in descriptors) {
+                    handlerTypes[serviceDescriptor.ServiceType] = provider.GetServices(serviceDescriptor.ServiceType);
+                }
+                
+                return new CommandDispatcher(handlerTypes);
+            });
             
             return services;
         }

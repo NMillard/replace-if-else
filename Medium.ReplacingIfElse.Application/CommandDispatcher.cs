@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Medium.ReplacingIfElse.Application.CommandHandlers;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Medium.ReplacingIfElse.Application {
     public class CommandDispatcher {
-        private readonly IServiceProvider provider;
+        private readonly Dictionary<Type, IEnumerable<object>> handlers;
 
-        public CommandDispatcher(IServiceProvider provider) {
-            this.provider = provider;
+        /// <param name="handlers">Provide a dictionary where the key is the type of command handler
+        /// and value is a list of all handlers for that specific command.</param>
+        public CommandDispatcher(Dictionary<Type, IEnumerable<object>> handlers) {
+            this.handlers = handlers;
         }
         
         /// <summary>
@@ -17,12 +18,9 @@ namespace Medium.ReplacingIfElse.Application {
         /// </summary>
         public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : class {
             // This basically places the Type of 'command' inside the ICommandHandlerAsync's generic brackets
-            Type handler = typeof(ICommandHandlerAsync<>).MakeGenericType(command.GetType());
+            Type handlerType = typeof(ICommandHandlerAsync<>).MakeGenericType(command.GetType());
 
-            // Some may perceive the service-locator pattern this to be an anti-pattern.
-            // But it's pretty damn handy, when you want to create applications that
-            // follow the Open/Closed principle.
-            IEnumerable<object> concreteHandlers = provider.GetServices(handler);
+            IEnumerable<object> concreteHandlers = handlers[handlerType];
 
             foreach (object concreteHandler in concreteHandlers) {
                 await ((ICommandHandlerAsync<TCommand>) concreteHandler).HandleAsync(command);
