@@ -1,4 +1,5 @@
-﻿GET https://localhost:5001/api/users
+﻿
+GET https://localhost:5001/api/users
 Accept: application/json
 
 ###
@@ -50,7 +51,7 @@ Content-Type: application/json
 ###
 
 // Update email using the dynamic command dispatcher
-POST https://localhost:5001/api/users/UpdateEmailWithDispatcher
+POST https://localhost:5001/api/users/dispatch/UpdateEmail
 Content-Type: application/json
 
 {

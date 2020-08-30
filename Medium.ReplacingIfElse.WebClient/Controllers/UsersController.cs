@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application;
-using Medium.ReplacingIfElse.Application.CommandHandlers.Users;
 using Medium.ReplacingIfElse.Application.Commands.Users;
 using Medium.ReplacingIfElse.Application.Queries.Users;
 using Medium.ReplacingIfElse.Domain;
@@ -10,14 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Medium.ReplacingIfElse.WebClient.Controllers {
     
+    /// <summary>
+    /// User controller that takes every operation as a separate dependency. <br />
+    /// This is essentially a poor man's CQS. <br />
+    ///
+    /// Easy to understand, easy to implement, easy to extend.
+    /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : ControllerBase {
         private readonly GetUsers getUsers;
         private readonly ChangeEmail changeEmail;
         private readonly ChangeUsername changeUsername;
-        private readonly UserService userService;
-        private readonly CommandDispatcher dispatcher;
 
         /* Take commands as dependencies.
          * This may get awkward once a constructor
@@ -31,15 +33,11 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         public UsersController(
             GetUsers getUsers,
             ChangeEmail changeEmail,
-            ChangeUsername changeUsername,
-            UserService userService, // <- Old-school service class.
-            CommandDispatcher dispatcher // <- dynamic command dispatcher
+            ChangeUsername changeUsername
             ) {
             this.getUsers = getUsers;
             this.changeEmail = changeEmail;
             this.changeUsername = changeUsername;
-            this.userService = userService;
-            this.dispatcher = dispatcher;
         }
         
         [HttpGet("")]
@@ -69,41 +67,19 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
             return Ok();
         }
 
+        
         /// <summary>
-        /// Old-School, CRUD inspired, useless endpoint that'll
-        /// bloat your code and ruin your sleep.
-        ///
-        /// Don't do this.
+        /// Model the incoming request used to update only a user's username.
         /// </summary>
-        [HttpPost("Update")]
-        public async Task<IActionResult> Update(UpdateUser input) {
-            await userService.UpdateUserAsync(input.UpdateReason, input);
-            
-            return Ok();
-        }
-        
-        [HttpPost("UpdateEmailWithDispatcher")]
-        public async Task<IActionResult> UpdateEmailWithDispatcher(ChangeEmailInput input) {
-            await dispatcher.DispatchAsync(new UpdateEmailCommand(input.OldEmail, input.NewEmail));
-            
-            return Ok();
-        }
-
-        public class UpdateUser : IUpdateUser {
-            public UpdateReason UpdateReason { get; set; }
-            [EmailAddress]
-            public string OriginalEmail { get; set; }
-            [EmailAddress]
-            public string UpdatedEmail { get; set; }
-            public string UpdatedUsername { get; set; }
-        }
-        
         public class ChangeUsernameInput : IChangeUsernameInput {
             [EmailAddress]
             public string Email { get; set; }
             public string NewUsername { get; set; }
         }
         
+        /// <summary>
+        /// Model the incoming request used to update only a user's email.
+        /// </summary>
         public class ChangeEmailInput : IEmailChangeInput {
 
             [EmailAddress]
