@@ -20,10 +20,14 @@ namespace Medium.ReplacingIfElse.Application {
             // This basically places the Type of 'command' inside the ICommandHandlerAsync's generic brackets
             Type handlerType = typeof(ICommandHandlerAsync<>).MakeGenericType(command.GetType());
 
-            IEnumerable<object> concreteHandlers = handlers[handlerType];
+            handlers.TryGetValue(handlerType, out IEnumerable<object>? concreteHandlers);
+            if (concreteHandlers is null) throw new ArgumentException($"No handler registered for {command.GetType()}");
 
             foreach (object concreteHandler in concreteHandlers) {
-                await ((ICommandHandlerAsync<TCommand>) concreteHandler).HandleAsync(command);
+                var handler = concreteHandler as ICommandHandlerAsync<TCommand>;
+                if (handler is null) continue;
+                
+                await handler.HandleAsync(command);
             }
         }
     }
