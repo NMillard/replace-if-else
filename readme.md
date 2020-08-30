@@ -18,5 +18,9 @@ This repo is used for a [medium article]()
 1. Go to scripts folder
 2. Run the `database.sql` script on the database you're using 
 
+### HTTP Requests
+I've created a collection of http requests in `http-tests/tests.http`.  
+You can run these directly from JetBrains Rider.  
+
 
 
