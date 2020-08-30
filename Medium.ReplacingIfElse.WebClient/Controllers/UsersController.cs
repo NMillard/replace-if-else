@@ -23,7 +23,8 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
 
         /* Take commands as dependencies.
          * This may get awkward once a constructor
-         * takes lots of commands...
+         * takes lots of commands... and you may want to consider
+         * using a command dispatcher.
          *
          * Good thing is, we get rid of Service classes,
          * which are basically logic dumpsters.
