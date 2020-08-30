@@ -9,20 +9,29 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Medium.ReplacingIfElse.Application.DependencyInjection {
     public static class ServiceInjector {
 
+        /// <summary>
+        /// Dynamically register all types of <see cref="ICommandHandlerAsync{TCommand}"/> from this assembly.<br />
+        /// </summary>
         public static IServiceCollection AddCommandDispatcher(this IServiceCollection services) {
             Type[] handlers = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsClass && t.GetInterfaces().Any(i =>
-                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandlerAsync<>)))
+                // Find all types where
+                .Where(t => t.IsClass && // the type is a class
+                            t.GetInterfaces() // and the type implements the generic type definition ICommandHandlerAsync
+                                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandlerAsync<>)))
                 .ToArray();
-
-            foreach (Type handler in handlers) {
-                Type? handlerType = handler
+            
+            // Register the interface with the concrete handler.
+            // Note: the current limitation is, every handler must be in a separate class.
+            // This won't work with a single class implementing the ICommandHandlerAsync<> multiple times.
+            foreach (Type concreteHandler in handlers) {
+                Type? handlerInterface = concreteHandler
                     .GetInterfaces()
                     .First(i => i.GetGenericTypeDefinition() == typeof(ICommandHandlerAsync<>));
-                services.AddScoped(handlerType, handler);
+                
+                services.AddScoped(handlerInterface, concreteHandler);
             }
 
-            services.AddScoped<CommandDispatcher>(_ => new CommandDispatcher(services));
+            services.AddScoped<CommandDispatcher>(provider => new CommandDispatcher(provider));
             
             return services;
         }
