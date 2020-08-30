@@ -1,7 +1,6 @@
-﻿# Replacing If-Else
+﻿# This repo is used for a [medium article]()
 
-This repo is used for a [medium article]()
-  
+# Replacing If-Else
   
 ### Prerequisites
 - dotnet core 3.1
