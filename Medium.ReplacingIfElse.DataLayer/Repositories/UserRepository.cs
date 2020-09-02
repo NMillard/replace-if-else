@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.repositories;
 using Medium.ReplacingIfElse.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +12,7 @@ namespace Medium.ReplacingIfElse.DataLayer.Repositories {
             this.dataStore = dataStore;
         }
         
-        public async Task<IAsyncEnumerable<User>> GetUsers() {
+        public async Task<IAsyncEnumerable<User>> GetUsersAsync() {
             return dataStore.Users.AsAsyncEnumerable();
         }
 

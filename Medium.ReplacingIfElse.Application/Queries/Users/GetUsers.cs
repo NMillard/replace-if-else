@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.repositories;
 using Medium.ReplacingIfElse.Domain;
 
 namespace Medium.ReplacingIfElse.Application.Queries.Users {
@@ -12,7 +12,7 @@ namespace Medium.ReplacingIfElse.Application.Queries.Users {
         }
 
         public async Task<IAsyncEnumerable<User>> ExecuteAsync() {
-            return await repository.GetUsers();
+            return await repository.GetUsersAsync();
         }
     }
 }

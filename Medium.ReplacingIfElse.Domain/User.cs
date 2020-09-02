@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace Medium.ReplacingIfElse.Domain {
+
     public class User {
         private Guid id;
 
@@ -13,8 +14,10 @@ namespace Medium.ReplacingIfElse.Domain {
             Username = email;
         }
 
+        // We could have made an Email class
+        // and username class, given that
+        // we'd need some domain logic.
         public string Email { get; private set; }
-
         public string Username { get; private set; }
 
         public Address Address { get; private set; }

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Medium.ReplacingIfElse.Domain;
 
-namespace Medium.ReplacingIfElse.Application.interfaces.repositories {
+namespace Medium.ReplacingIfElse.Application.Interfaces.repositories {
     public interface IUserRepository {
-        Task<IAsyncEnumerable<User>> GetUsers();
+        Task<IAsyncEnumerable<User>> GetUsersAsync();
         Task<User?> FindByEmailAsync(string email);
         Task<bool> UpdateAsync(User user);
     }

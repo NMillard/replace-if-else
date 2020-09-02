@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.repositories;
 
 namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
     public class NotifyMarketingOnEmailUpdateHandler : ICommandHandlerAsync<UpdateEmailCommand> {

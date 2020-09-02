@@ -1,5 +1,5 @@
 ﻿using System;
-using Medium.ReplacingIfElse.Application.interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.repositories;
 using Medium.ReplacingIfElse.DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
