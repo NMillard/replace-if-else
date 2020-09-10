@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Medium.ReplacingIfElse.Application\Medium.ReplacingIfElse.Application.csproj" />
     <ProjectReference Include="..\Medium.ReplacingIfElse.DataLayer\Medium.ReplacingIfElse.DataLayer.csproj" />
+    <ProjectReference Include="..\Medium.ReplacingIfElse.Messaging\Medium.ReplacingIfElse.Messaging.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7">

@@ -13,10 +13,10 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
     /// </summary>
     [ApiController]
     [Route("api/users")]
-    public class UsersServiceController : ControllerBase {
+    public class UserGen1Controller : ControllerBase {
         private readonly UserService service;
 
-        public UsersServiceController(UserService service) {
+        public UserGen1Controller(UserService service) {
             this.service = service;
         }
         

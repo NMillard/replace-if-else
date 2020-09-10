@@ -10,7 +10,7 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
     
     /// <summary>
     /// User controller that takes every operation as a separate dependency. <br />
-    /// This is essentially a poor man's CQS. <br />
+    /// This is essentially a poor man's CQS. Which is a great pragmatic approach. <br />
     ///
     /// Easy to understand, easy to implement, easy to extend.
     /// </summary>

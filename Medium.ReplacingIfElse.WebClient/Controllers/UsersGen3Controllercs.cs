@@ -9,7 +9,7 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
     /// A dynamic controller that sends commands to a dispatcher. <br />
     ///
     /// It's incredibly easy to test, as we only need a single dependency on
-    /// <see cref="CommandDispatcher"/>. <br />.
+    /// <see cref="CommandDispatcher"/>. <br />
     ///
     /// The trade-off is, it's slightly more difficult to reason about than the
     /// <see cref="UsersController"/>, if you're not used to CQS. 

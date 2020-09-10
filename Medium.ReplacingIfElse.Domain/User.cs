@@ -14,6 +14,8 @@ namespace Medium.ReplacingIfElse.Domain {
             Username = email;
         }
 
+        public string Id => id.ToString();
+        
         // We could have made an Email class
         // and username class, given that
         // we'd need some domain logic.
