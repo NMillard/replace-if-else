@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.Interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.Repositories;
 using Medium.ReplacingIfElse.Domain;
 
 namespace Medium.ReplacingIfElse.Application.Commands.Users {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.Interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Interfaces.Repositories;
 using Medium.ReplacingIfElse.Domain;
 using Microsoft.EntityFrameworkCore;
 

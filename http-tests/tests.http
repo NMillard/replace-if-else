@@ -55,8 +55,8 @@ POST https://localhost:5001/api/users/dispatch/UpdateEmail
 Content-Type: application/json
 
 {
-  "OldEmail": "lastuser@user.dk@user.dk",
-  "NewEmail": "verylast@user.dk"
+  "OldEmail": "someuser@user.dk",
+  "NewEmail": "newuseremail@user.dk"
 }
 
 ###

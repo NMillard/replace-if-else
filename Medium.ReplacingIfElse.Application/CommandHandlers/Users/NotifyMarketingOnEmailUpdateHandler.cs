@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Medium.ReplacingIfElse.Application.CommandHandlers.Commands;
+using Medium.ReplacingIfElse.Application.Commands.Inputs;
 using Medium.ReplacingIfElse.Application.Interfaces.Messaging;
 
 namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
-    public class NotifyMarketingOnEmailUpdateHandler : ICommandHandlerAsync<UpdateEmailCommand> {
+    public class NotifyMarketingOnEmailUpdateHandler : ICommandHandlerAsync<ChangeEmailCommand> {
         private readonly IMessaging messageBus;
 
         public NotifyMarketingOnEmailUpdateHandler(IMessaging messageBus) {
@@ -11,7 +13,7 @@ namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
         }
         
         // Notice this is the exact same code as in the ChangeEmail.cs
-        public async Task HandleAsync(UpdateEmailCommand command) {
+        public async Task HandleAsync(ChangeEmailCommand command) {
             // Let's use some guard clauses
             if (string.IsNullOrEmpty(command.OldEmail)) return;
             if (string.IsNullOrEmpty(command.NewEmail)) return;

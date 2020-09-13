@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.Interfaces.repositories;
+using Medium.ReplacingIfElse.Application.Commands.Inputs;
+using Medium.ReplacingIfElse.Application.Interfaces.Repositories;
 using Medium.ReplacingIfElse.Domain;
 
 namespace Medium.ReplacingIfElse.Application.Commands.Users {
@@ -25,18 +26,5 @@ namespace Medium.ReplacingIfElse.Application.Commands.Users {
 
             await repository.UpdateAsync(user);
         }
-    }
-
-    public interface IEmailChangeInput {
-
-        /// <summary>
-        /// Email to be changed. This is also used to look up the user.
-        /// </summary>
-        public string OldEmail { get; } // <- no setter!
-        
-        /// <summary>
-        /// The new email
-        /// </summary>
-        public string NewEmail { get; } // <- no setter!
     }
 }

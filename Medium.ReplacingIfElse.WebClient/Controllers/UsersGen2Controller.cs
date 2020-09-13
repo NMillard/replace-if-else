@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Medium.ReplacingIfElse.Application.Commands.Users;
 using Medium.ReplacingIfElse.Application.Queries.Users;
 using Medium.ReplacingIfElse.Domain;
+using Medium.ReplacingIfElse.WebClient.RequestModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 
 namespace Medium.ReplacingIfElse.WebClient.Controllers {
     
@@ -20,6 +23,7 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         private readonly GetUsers getUsers;
         private readonly ChangeEmail changeEmail;
         private readonly ChangeUsername changeUsername;
+        private readonly IDistributedCache cache;
 
         /* Take commands as dependencies.
          * This may get awkward once a constructor
@@ -34,18 +38,34 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         public UsersController(
             GetUsers getUsers,
             ChangeEmail changeEmail,
-            ChangeUsername changeUsername
+            ChangeUsername changeUsername,
+            IDistributedCache cache
             ) {
             this.getUsers = getUsers;
             this.changeEmail = changeEmail;
             this.changeUsername = changeUsername;
+            this.cache = cache;
         }
         
         [HttpGet("")]
         public async Task<IActionResult> GetUsers() {
-            IAsyncEnumerable<User> users = await getUsers.ExecuteAsync();
+            string s = await cache.GetStringAsync("users");
+            
+            if (s is null) {
+                var list = new List<User>();
+                
+                IAsyncEnumerable<User> users = await getUsers.ExecuteAsync();
+                await foreach (User user in users) list.Add(user);
 
-            return Ok(users);
+                await cache.SetStringAsync("users", JsonConvert.SerializeObject(list), new DistributedCacheEntryOptions {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(10),
+                });
+                return Ok(users);
+            }
+            
+            var e = JsonConvert.DeserializeObject<List<User>>(s);
+            
+            return Ok(e);
         }
 
         [HttpPost("UpdateEmail")]
@@ -65,30 +85,8 @@ namespace Medium.ReplacingIfElse.WebClient.Controllers {
         [HttpPost("UpdateUsername")]
         public async Task<IActionResult> UpdateUsername(ChangeUsernameInput input) {
             await changeUsername.ExecuteAsync(input);
-            return Ok();
-        }
-
-        
-        /// <summary>
-        /// Model the incoming request used to update only a user's username.
-        /// </summary>
-        public class ChangeUsernameInput : IChangeUsernameInput {
-            [EmailAddress]
-            public string Email { get; set; }
-            public string NewUsername { get; set; }
-        }
-        
-        /// <summary>
-        /// Model the incoming request used to update only a user's email.
-        /// </summary>
-        public class ChangeEmailInput : IEmailChangeInput {
-
-            [EmailAddress]
-            public string OldEmail { get; set; }
             
-            [EmailAddress]
-            public string NewEmail { get; set; }
-
+            return Ok();
         }
     }
 }

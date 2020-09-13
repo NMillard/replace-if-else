@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Medium.ReplacingIfElse.Application.Interfaces.repositories;
+using Medium.ReplacingIfElse.Application.CommandHandlers.Commands;
+using Medium.ReplacingIfElse.Application.Commands.Inputs;
+using Medium.ReplacingIfElse.Application.Interfaces.Repositories;
 using Medium.ReplacingIfElse.Domain;
 
 namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
-    public class UpdateEmailHandler : ICommandHandlerAsync<UpdateEmailCommand> {
+    public class UpdateEmailHandler : ICommandHandlerAsync<ChangeEmailCommand> {
         private readonly IUserRepository repository;
 
         public UpdateEmailHandler(IUserRepository repository) {
@@ -11,7 +13,8 @@ namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
         }
         
         // Notice this is the exact same code as in the ChangeEmail.cs
-        public async Task HandleAsync(UpdateEmailCommand command) {
+        // Except the notify marketing part is no longer needed.
+        public async Task HandleAsync(ChangeEmailCommand command) {
             // Let's use some guard clauses
             if (string.IsNullOrEmpty(command.OldEmail)) return;
             if (string.IsNullOrEmpty(command.NewEmail)) return;
@@ -22,7 +25,6 @@ namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
             user.ChangeEmail(command.NewEmail);
             
             // Generate new security stamp
-            // Notify marketing
 
             await repository.UpdateAsync(user);
         }

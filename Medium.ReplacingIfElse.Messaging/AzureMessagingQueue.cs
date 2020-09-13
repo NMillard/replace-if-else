@@ -4,10 +4,10 @@ using Azure.Storage.Queues;
 using Medium.ReplacingIfElse.Application.Interfaces.Messaging;
 
 namespace Medium.ReplacingIfElse.Messaging {
-    public class Messaging : IMessaging {
+    public class AzureMessagingQueue : IMessaging {
         private readonly string connectionString;
 
-        public Messaging(string connectionString) {
+        public AzureMessagingQueue(string connectionString) {
             this.connectionString = connectionString;
         }
         
