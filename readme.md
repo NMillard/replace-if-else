@@ -12,25 +12,29 @@ are invoked to deal with the command.
   
 ### Prerequisites
 - dotnet core 3.1
-- MS-SQL database, you can use docker if'd like
+- MS-SQL database
+- Redis
 
 ### Startup instructions
 
-#### Database connection setup
-1. Go to Medium.ReplacingIfElse.WebClient
-2. Open appsettings.Development.json
-3. Insert your connection string to the database
+#### Connection strings
+For anyone new or not used to dotnet, connection strings are simply a means to connect to external services.  
 
-or
+All connection strings should be set using the `dotnet user-secrets set 'key' 'value'`  
 
-Set the connection string in your donet user-secrets.
+**Keys**  
+SQL server: "ConnectionString:default"  
+Azure queue: "ConnectionString:queue"  
+Redis cache: "ConnectionString:cache"  
+
+Have a look at the `appsettings.json` in the WebClient project.
+  
+This application is configured to require an MS-SQL database and redis cache. You can easily just pull the docker images for this.  
+The azure queue storage is optional.
 
 #### Database tables
 1. Go to scripts folder
 2. Run the `database.sql` script on the database you're using 
-
-#### Azure Queues
-1. Set the `ConnectionStrings:queue` setting if you'd like to use the messaging service and background service.
 
 ## HTTP Requests
 I've created a collection of http requests in `http-tests/tests.http`.  
