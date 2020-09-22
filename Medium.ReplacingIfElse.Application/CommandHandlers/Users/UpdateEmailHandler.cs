@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Medium.ReplacingIfElse.Application.CommandHandlers.Commands;
-using Medium.ReplacingIfElse.Application.Commands.Inputs;
 using Medium.ReplacingIfElse.Application.Interfaces.Repositories;
 using Medium.ReplacingIfElse.Domain;
 
@@ -15,10 +14,6 @@ namespace Medium.ReplacingIfElse.Application.CommandHandlers.Users {
         // Notice this is the exact same code as in the ChangeEmail.cs
         // Except the notify marketing part is no longer needed.
         public async Task HandleAsync(ChangeEmailCommand command) {
-            // Let's use some guard clauses
-            if (string.IsNullOrEmpty(command.OldEmail)) return;
-            if (string.IsNullOrEmpty(command.NewEmail)) return;
-            
             User? user = await repository.FindByEmailAsync(command.OldEmail);
             if (user is null) return;
             
