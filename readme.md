@@ -1,4 +1,4 @@
-﻿# This repo is used for a [medium article]()
+﻿# This repo is used for a [medium article](https://levelup.gitconnected.com/replacing-if-else-with-commands-and-handlers-527e0abe2147)
 
 The purpose is to showcase three different approaches to how controller and actions are designed.  
 
